@@ -10,7 +10,10 @@ const APP_STRINGS = {
     loading: 'Loading Game...',
     buttonText: 'BEGIN',
   },
-  results: {},
+  results: {
+    score: 'You scored',
+    resetGame: 'Play Again?',
+  },
 }
 
 export default APP_STRINGS;

@@ -9,23 +9,18 @@ export interface Question {
 }
 
 export interface Answer {
-  question: string,
-  value: boolean,
+  question: string | undefined,
+  isCorrect: boolean | string,
 }
 
 // State
 export interface InitialState {
   answers: Answer[],
-  currentQuestionIdx: number,
+  questionIdx: number,
+  currentQuestion: Question | undefined,
   questions: Question[],
   score: number,
   isLoading: boolean,
   totalQuestions: number,
-}
-
-// Action Types
-export interface SubmitAnswer {
-  type: 'string',
-  payload: Answer,
 }
 

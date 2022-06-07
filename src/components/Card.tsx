@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-const Content = styled.div`
+const Card = styled.div`
+  width: 80%;
   height: 50vh;
   display: flex;
   justify-content: center;
@@ -9,4 +10,4 @@ const Content = styled.div`
   padding: 20px;
 `;
 
-export default Content;
+export default Card;

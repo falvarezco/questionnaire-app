@@ -1,40 +1,60 @@
-import React, { useEffect, useRef } from 'react';
+import React, { FC, useEffect } from 'react';
 import { unescape }from 'lodash';
 import { AppDispatch, RootState } from '../../store';
+import { submitAnswer, gotToNextQuestion } from '../../store/reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Question } from '../../types/reducer';
 import Header from '../../components/Header';
 import Card from '../../components/Card';
 import Text from '../../components/Text';
+import ButtonGroup, { ButtonElement } from '../../components/ButtonGroup';
 
+const BUTTONS: ButtonElement[] = [
+  {id: 'trueField', value: 'true'},
+  {id: 'falseField', value: 'false'},
+];
 
-const Quiz = () => {
+const Quiz: FC = () => {
   const {
-    currentQuestionIdx,
+    currentQuestion,
     totalQuestions,
-    questions,
+    questionIdx,
   } = useSelector(({quizState}: RootState) => quizState);
+
   let navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const question = useRef<Question>(questions[currentQuestionIdx]);
 
   useEffect(() => {
-    if (questions.length === 0) {
-      navigate('/');
+    if (!currentQuestion) {
+      return navigate('/');
     }
-    question.current = questions[currentQuestionIdx];
-  }, [currentQuestionIdx, questions, navigate]);
+  }, [navigate]);
+
+  // Save Submited Answer or Go to Results
+  const handleValueSelected = (value: string): void | { payload: undefined; type: string; } => {
+    const isLastQuestion = questionIdx + 1 === totalQuestions;
+    const correct = currentQuestion?.correct_answer;
+    const isCorrect = value === correct?.toLowerCase();
+
+    dispatch(submitAnswer({question: currentQuestion?.question, isCorrect}));
+    return isLastQuestion ? navigate('/results') : dispatch(gotToNextQuestion());
+  }
 
   return (
     <>
-      <Header>
-        <Text isTitle>{question.current?.category}</Text>
-      </Header>
-      <Card>
-        <Text>{unescape(question.current?.question)}</Text>
-      </Card>
-      <Text>{`${currentQuestionIdx + 1}/${totalQuestions}`}</Text>
+      {currentQuestion && (
+        <>
+          <Header>
+            <Text isTitle>{currentQuestion.category}</Text>
+          </Header>
+          <Card>
+            {/* TODO: Adress missing characters */}
+            <Text>{unescape(currentQuestion.question)}</Text>
+          </Card>
+          <ButtonGroup handleClick={handleValueSelected} buttons={BUTTONS}/>
+          <Text>{`${questionIdx + 1}/${totalQuestions}`}</Text>
+        </>
+      )}
     </>
   )
 };

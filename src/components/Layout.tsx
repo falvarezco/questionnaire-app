@@ -1,11 +1,15 @@
 import React, { ReactNode, FC } from 'react';
 import Styled from 'styled-components';
 
-interface LayoutProps {
+interface ContainerProps {
+  fullHeight?: boolean,
+}
+
+interface LayoutProps extends ContainerProps {
   children: ReactNode,
 }
 
-const Container = Styled.div`
+const Container = Styled.div<ContainerProps>`
   display: flex;
   padding: 20px;
   flex-direction: column;
@@ -14,12 +18,24 @@ const Container = Styled.div`
   height: 100vh;
 `;
 
-const Layout: FC<LayoutProps> = ({children}) => {
+const FullHeightContainer = Styled.div<ContainerProps>`
+  position: relative;
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+`;
+
+const Layout: FC<LayoutProps> = ({children, fullHeight}) => {
   return (
+    fullHeight ? 
+    <FullHeightContainer>
+      {children}
+    </FullHeightContainer>
+    :
     <Container>
       {children}
     </Container>
-  );
+  )
 }
 
 export default Layout;
