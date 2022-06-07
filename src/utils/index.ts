@@ -1,3 +1,3 @@
-import { unescape } from 'lodash';
+import { decode } from 'he';
 
-// export const
+export const decodeTxt = (v: string) => decode(v); 

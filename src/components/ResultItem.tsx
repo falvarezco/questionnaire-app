@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { unescape } from 'lodash';
+import { decodeTxt } from '../utils';
 import { Answer } from '../types/reducer';
 import styled from 'styled-components';
 import Text from './Text';
@@ -8,7 +8,7 @@ const ResultItem : FC<Answer> = ({question, isCorrect}) => {
   return (
     <StyledResult>
       <span className='icon'>{isCorrect ? '+' : '-'}</span>
-      <Text align='left'>{unescape(question)}</Text>
+      <Text align='left'>{question && decodeTxt(question)}</Text>
     </StyledResult>
   )
 };

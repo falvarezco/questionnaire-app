@@ -1,8 +1,8 @@
 import React, { FC, useEffect } from 'react';
-import { unescape }from 'lodash';
 import { AppDispatch, RootState } from '../../store';
 import { submitAnswer, gotToNextQuestion } from '../../store/reducer';
 import { useSelector, useDispatch } from 'react-redux';
+import { decodeTxt } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Card from '../../components/Card';
@@ -28,7 +28,7 @@ const Quiz: FC = () => {
     if (!currentQuestion) {
       return navigate('/');
     }
-  }, [navigate]);
+  }, [navigate, currentQuestion]);
 
   // Save Submited Answer or Go to Results
   const handleValueSelected = (value: string): void | { payload: undefined; type: string; } => {
@@ -49,7 +49,7 @@ const Quiz: FC = () => {
           </Header>
           <Card>
             {/* TODO: Adress missing characters */}
-            <Text>{unescape(currentQuestion.question)}</Text>
+            <Text>{decodeTxt(currentQuestion.question)}</Text>
           </Card>
           <ButtonGroup handleClick={handleValueSelected} buttons={BUTTONS}/>
           <Text>{`${questionIdx + 1}/${totalQuestions}`}</Text>
